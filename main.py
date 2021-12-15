@@ -26,7 +26,7 @@ class zapis_za_slanje:
 
 
 url = "https://eojn.nn.hr/SPIN/application/ipn/DocumentManagement/NewPreglediDokumenataFrm.aspx/"
-service = Service("C:/Users/Komp/PycharmProjects/NarodneNovineScraper/chromedriver.exe")
+service = Service("C:/Users/Komp/PycharmProjects/NarodneNovineZadnji/chromedriver.exe")
 chrome_options = Options()
 
 driver = webdriver.Chrome(
@@ -44,6 +44,8 @@ lista_zapisa = []
 brojac = 1
 datum = "datum"
 lista_za_slanje = []
+global brojcanik
+brojcanik=0
 
 datum_xpath = "/html/body/form/div[3]/table/tbody/tr/td/div/div[2]/div[1]/h1/span[1]"
 
@@ -64,6 +66,7 @@ while brojac < 10:
             "NewPreglediDokumenataFrm.aspx/", "")
 
         brojac = brojac + 1
+        brojcanik=brojcanik+1
 
         lista_zapisa.append(zapis(naslov, tekst, link))
     except NoSuchElementException:
@@ -84,6 +87,7 @@ while brojac < 10:
             "NewPreglediDokumenataFrm.aspx/", "")
 
         brojac = brojac + 1
+        brojcanik = brojcanik + 1
 
         lista_zapisa.append(zapis(naslov, tekst, link))
     except NoSuchElementException:
@@ -103,6 +107,7 @@ while brojac < 10:
             "NewPreglediDokumenataFrm.aspx/", "")
 
         brojac = brojac + 1
+        brojcanik = brojcanik + 1
 
         lista_zapisa.append(zapis(naslov, tekst, link))
     except NoSuchElementException:
@@ -122,6 +127,7 @@ while brojac < 10:
             "NewPreglediDokumenataFrm.aspx/", "")
 
         brojac = brojac + 1
+        brojcanik = brojcanik + 1
 
         lista_zapisa.append(zapis(naslov, tekst, link))
     except NoSuchElementException:
@@ -141,6 +147,7 @@ while brojac < 10:
             "NewPreglediDokumenataFrm.aspx/", "")
 
         brojac = brojac + 1
+        brojcanik = brojcanik + 1
 
         lista_zapisa.append(zapis(naslov, tekst, link))
     except NoSuchElementException:
@@ -160,6 +167,7 @@ while brojac < 10:
             "NewPreglediDokumenataFrm.aspx/", "")
 
         brojac = brojac + 1
+        brojcanik = brojcanik + 1
 
         lista_zapisa.append(zapis(naslov, tekst, link))
     except NoSuchElementException:
@@ -179,6 +187,7 @@ while brojac < 10:
             "NewPreglediDokumenataFrm.aspx/", "")
 
         brojac = brojac + 1
+        brojcanik = brojcanik + 1
 
         lista_zapisa.append(zapis(naslov, tekst, link))
     except NoSuchElementException:
@@ -199,6 +208,7 @@ while brojac < 10:
             "NewPreglediDokumenataFrm.aspx/", "")
 
         brojac = brojac + 1
+        brojcanik = brojcanik + 1
 
         lista_zapisa.append(zapis(naslov, tekst, link))
     except NoSuchElementException:
@@ -222,6 +232,7 @@ while brojac < 10:
             "NewPreglediDokumenataFrm.aspx/", "")
 
         brojac = brojac + 1
+        brojcanik = brojcanik + 1
 
         lista_zapisa.append(zapis(naslov, tekst, link))
     except NoSuchElementException:
@@ -242,6 +253,7 @@ while brojac < 10:
             "NewPreglediDokumenataFrm.aspx/", "")
 
         brojac = brojac + 1
+        brojcanik = brojcanik + 1
 
         lista_zapisa.append(zapis(naslov, tekst, link))
     except NoSuchElementException:
@@ -279,10 +291,10 @@ for zapis in lista_zapisa:
 EMAIL_PASSWORD = "ovojenekasifra1!"
 EMAIL_ADRESS = "sioslav.send@gmail.com"
 
-poruka = ""
+poruka = "Nije bilo objava koje sadrže ključne riječi. Ovo je default status poruke koju eventualni match pregazi."
 
 for zapis_za_slanje in lista_za_slanje:
-    poruka = poruka + zapis_za_slanje.naslov + "<br>" + "Po kljucnoj rijeci: " + zapis_za_slanje.kljucna + "<br>" + zapis_za_slanje.tekst.replace(str(zapis_za_slanje.kljucna), str("<strong>"+zapis_za_slanje.kljucna+"</strong>")) + ", " + zapis_za_slanje.link + "<br>" + "<br>"
+    poruka = poruka + zapis_za_slanje.naslov + "<br>" + "Po kljucnoj rijeci: " + zapis_za_slanje.kljucna + "<br>" + zapis_za_slanje.tekst.replace(str(zapis_za_slanje.kljucna), str("<mark>"+zapis_za_slanje.kljucna+"</mark>")) + ", " + zapis_za_slanje.link + "<br>" + "<br>"
 
 msg = EmailMessage()
 msg["Subject"] = "TEST objava javne nabave TEST"
@@ -291,8 +303,7 @@ msg["To"] = EMAIL_ADRESS
 msg.set_content(poruka)
 
 msg.add_alternative(
-    "<html><body><h1 style='background-color:DodgerBlue;'>Hello World</h1></body>" + poruka +
-    "<strong>BOLDANI</strong> " + "</html>",
+    "<html><body>Broj pregledanih objava: "+ str(brojcanik) +"<br>" + poruka +"</body></html>",
     subtype="html")
 
 with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
